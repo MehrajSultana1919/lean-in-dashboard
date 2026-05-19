@@ -30,16 +30,18 @@ Circle health reflects plausible engagement patterns
 
 Everything is labeled clearly so it’s easy to see what’s real and what’s simulated. I think clarity and honesty are important, especially when looking at impact.
 
-Tools I used
+**Tools I used**
+
 Chart.js for all the visualizations
 Plain HTML, CSS, and JavaScript—no frameworks
 I used a simple AI tool only occasionally, for brainstorming ideas or small tweaks, but all the design, coding, and analysis decisions were mine
-What I’d do with more time
+
+**What I’d do with more time**
 
 The first thing I would tackle is a predictive churn model. The retention curve shows a steep drop in the first 30 days, and right now we only see it after members leave. A model using early engagement signals could give the team a heads-up and allow outreach before people drop off.
 
 I’d also want to dig deeper into the promotion lift. The 1.87× number is meaningful, but it’s correlation, not causation. Women who join Circles may already be more career-motivated. A matched cohort study could either validate that figure or spark a more nuanced conversation about what Lean In can truly claim.
 
-One thing I really want you to notice
+**One thing I really want you to notice**
 
 The WoC participation rate is front and center. I put it there deliberately. If that number is low, it means the platform is mostly helping women who already have advantages—which is exactly the opposite of Lean In’s mission. I want this KPI to be the first thing a leader sees every week, not buried in a filter somewhere.

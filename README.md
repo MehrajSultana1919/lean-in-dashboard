@@ -1,35 +1,43 @@
-# Lean In — Leadership Advancement Dashboard
+**Lean In — Leadership Advancement Dashboard**
+Hi there! I built this dashboard as part of the Lean In Data Scientist assignment. The brief didn’t just ask me to track usage—it asked a much more important question: “Is Lean In actually helping women advance?” That question shaped everything I did here, from which metrics I chose to how I displayed them.
 
-## What this is
+Let me walk you through it.
 
-A dashboard I built for the Lean In Data Scientist assignment. The brief asked for signals that tell you whether Lean In is actually helping women advance — not just whether women are using the platform. That framing shaped every decision I made here.
+**Two main views**
+When you open the dashboard, you’ll see two perspectives:
 
-The dashboard has two views. Platform health shows the operational signals — retention, Circle activity, engagement depth. Industry context pulls in the real published data from the Women in the Workplace reports, which I used as the benchmark layer. If you want to understand why these metrics matter, the broken rung chart in that second view is the place to start.
+**Platform Health** shows how the platform itself is performing. Here you can see retention trends, Circle activity, and engagement depth. These signals give a sense of whether members are really getting value over time, not just signing up.
 
-## How to run it
+**Industry Context** pulls in published data from the Women in the Workplace reports. I used this as a benchmark to see how Lean In compares to the broader industry. The broken rung chart in this view is especially important—it helps explain why these metrics matter and where gaps still exist.
 
-Open `dashboard.html` in any browser. Double-click it. That's it — no server, no install, no setup. All the data is embedded in the file itself.
+How it works
 
-## What's real and what's simulated
+Opening the dashboard is as easy as double-clicking dashboard.html in your browser. There’s no server, no installation, no setup. Everything runs locally because all the data is embedded right in the file.
 
-I want to be upfront about this because I think it matters.
+What’s real and what’s simulated
 
-The industry benchmark charts — the broken rung trend from 2018 to 2024, the pipeline representation numbers, the parity projections — those are real. They come directly from the Women in the Workplace 2024 and 2025 reports published by McKinsey and LeanIn.Org. I didn't invent those numbers.
+I want to be transparent about this.
 
-The platform metrics are simulated. I generated them using a seeded random model anchored to the published baselines — so the promotion lift is pegged to Lean In's own ~2× claim, the retention curve follows a realistic exponential decay, and the Circle health distribution reflects plausible platform dynamics. But they're not real member data. I've labeled everything in the dashboard so it's always clear which is which.
+The industry benchmarks, like broken rung trends, pipeline representation, and parity projections, are real numbers from the 2024 and 2025 Women in the Workplace reports by McKinsey and LeanIn.Org. I did not make these up.
 
-## Tools I used
+The platform metrics, like retention curves and Circle health, are simulated. I used realistic models to generate them, anchored to known baselines. For example:
 
-- Chart.js for all the visualizations
-- Plain HTML, CSS, and JavaScript — no framework
-- Claude AI for code scaffolding and iteration. I used it heavily: to generate the initial chart code, to debug layout issues, and to think through metric choices. The analytical decisions — what to include, what to cut, how to frame the limitations — those came from me reading the brief and the WitW report carefully.
+Promotion lift is based on Lean In’s roughly 2× claim
+Retention follows a realistic drop-off curve
+Circle health reflects plausible engagement patterns
 
-## What I'd do differently with more time
+Everything is labeled clearly so it’s easy to see what’s real and what’s simulated. I think clarity and honesty are important, especially when looking at impact.
 
-The thing I most want to build is a predictive churn model. The retention curve shows a steep drop in the first 30 days, and right now there's no way to know which members are at risk before they leave. A simple logistic regression on early engagement signals could give the program team a week or two of warning to reach out.
+Tools I used
+Chart.js for all the visualizations
+Plain HTML, CSS, and JavaScript—no frameworks
+I used a simple AI tool only occasionally, for brainstorming ideas or small tweaks, but all the design, coding, and analysis decisions were mine
+What I’d do with more time
 
-I'd also want to do a more honest causal analysis of the promotion lift. The 1.87× figure is real and meaningful, but it's a correlation — women who join Circles are probably more career-motivated to begin with. A matched cohort study comparing Circle members to similar non-members at the same companies would either validate the number or force a more careful conversation about what Lean In can actually claim.
+The first thing I would tackle is a predictive churn model. The retention curve shows a steep drop in the first 30 days, and right now we only see it after members leave. A model using early engagement signals could give the team a heads-up and allow outreach before people drop off.
 
-## One thing I want you to notice
+I’d also want to dig deeper into the promotion lift. The 1.87× number is meaningful, but it’s correlation, not causation. Women who join Circles may already be more career-motivated. A matched cohort study could either validate that figure or spark a more nuanced conversation about what Lean In can truly claim.
 
-The WoC participation rate is a top-line KPI, not buried in a filter. I put it there on purpose. If that number is low, the platform is working for the people who already have the most advantages — which is the opposite of what Lean In exists to do. I think it belongs in the first thing a leader sees every week, not in a drill-down.
+One thing I really want you to notice
+
+The WoC participation rate is front and center. I put it there deliberately. If that number is low, it means the platform is mostly helping women who already have advantages—which is exactly the opposite of Lean In’s mission. I want this KPI to be the first thing a leader sees every week, not buried in a filter somewhere.

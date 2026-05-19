@@ -4,8 +4,6 @@ When I first read this brief, the thing that stuck with me was a tension I've se
 
 So the first decision I made was to throw out anything that doesn't have a clear line to career advancement. That cut the list roughly in half.
 
----
-
 ## The signals I chose
 
 **Promotion lift — Circle members vs. non-members**
@@ -30,8 +28,6 @@ This one I put at the top of the dashboard intentionally. The WitW data is prett
 
 Less of a mission metric, more of a leading indicator. If Circles stop meeting, everything else degrades — retention, advancement, community. I included the 12-month heatmap so you can see seasonal patterns. In the simulated data there's a dip in October that matches what you'd expect around back-to-school and end-of-year work cycles.
 
----
-
 ## What I left out
 
 I deliberately excluded a few things that came up as obvious candidates:
@@ -44,8 +40,6 @@ I deliberately excluded a few things that came up as obvious candidates:
 
 **Content engagement (likes, saves, shares).** Could be interesting eventually — particularly if you could connect specific content types to promotion outcomes — but right now it's too early in the signal chain to be actionable.
 
----
-
 ## Limitations I'd want a leader to know before acting on this
 
 The promotion data is self-reported. Women who get promoted are more likely to come back, log in, and report it. Women who don't get promoted may quietly disengage. This creates an upward bias in the lift number that's hard to correct without external verification.
@@ -55,8 +49,6 @@ The platform metrics — retention, cadence, Circle health — are synthetic. Th
 The women of color participation rate relies on self-identification at signup. Under-reporting is likely, which means the real gap is probably larger than what the dashboard shows.
 
 And finally: the ~2× promotion lift is a correlation. It shouldn't be presented externally as proof that Circles cause promotions without more rigorous analysis — ideally a matched cohort study comparing Circle members to demographically similar non-members at the same companies.
-
----
 
 ## What I'd build next
 

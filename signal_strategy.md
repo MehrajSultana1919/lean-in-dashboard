@@ -1,4 +1,4 @@
-# What I'd actually measure — and why
+# What I'd actually measure and why
 
 When I first read this brief, the thing that stuck with me was a tension I've seen in a lot of mission-driven orgs: you end up tracking things that are easy to count instead of things that matter. Lean In could easily build a dashboard full of pageviews, email opens, and social impressions. Those numbers would look great. They'd also tell you almost nothing about whether a woman got promoted.
 
@@ -6,7 +6,7 @@ So the first decision I made was to throw out anything that doesn't have a clear
 
 ## The signals I chose
 
-**Promotion lift — Circle members vs. non-members**
+**Promotion lift : Circle members vs. non-members**
 
 This is the one that matters most. Lean In already publishes a ~2× promotion rate for Circle members, and that's the number everything else should point toward. The way I set this up, it's calculated against a baseline of roughly 13%, the general population promotion rate implied by the Women in the Workplace data. Circle members in the simulated data come in around 1.87× that.
 
@@ -44,7 +44,7 @@ I deliberately excluded a few things that came up as obvious candidates:
 
 The promotion data is self-reported. Women who get promoted are more likely to come back, log in, and report it. Women who don't get promoted may quietly disengage. This creates an upward bias in the lift number that's hard to correct without external verification.
 
-The platform metrics — retention, cadence, Circle health, are synthetic. They're built on realistic assumptions and anchored to published benchmarks, but they're not real member data. The patterns are plausible, not measured.
+The platform metrics, retention, cadence, Circle health, are synthetic. They're built on realistic assumptions and anchored to published benchmarks, but they're not real member data. The patterns are plausible, not measured.
 
 The women of color participation rate relies on self-identification at signup. Under-reporting is likely, which means the real gap is probably larger than what the dashboard shows.
 

@@ -1,6 +1,6 @@
 # Lean In Leadership Advancement Dashboard
 
-Hi there! I built this dashboard as part of the Lean In Data Scientist assignment. The brief wasn’t just about tracking usage—it asked a much more important question: *“Is Lean In actually helping women advance?”* That question shaped everything I did here, from which metrics I chose to how I displayed them.
+Hi there! I built this dashboard as part of the Lean In Data Scientist assignment. The brief wasn’t just about tracking usage it asked a much more important question: *“Is Lean In actually helping women advance?”* That question shaped everything I did here, from which metrics I chose to how I displayed them.
 
 Let me walk you through it.
 
@@ -10,7 +10,7 @@ When you open the dashboard, you’ll see two perspectives:
 
 **Platform Health** shows how the platform itself is performing. Here you can see retention trends, Circle activity, and engagement depth. These signals give a sense of whether members are really getting value over time, not just signing up.
 
-**Industry Context** pulls in published data from the *Women in the Workplace* reports. I used this as a benchmark to see how Lean In compares to the broader industry. The broken rung chart in this view is especially important—it helps explain why these metrics matter and where gaps still exist.
+**Industry Context** pulls in published data from the *Women in the Workplace* reports. I used this as a benchmark to see how Lean In compares to the broader industry. The broken rung chart in this view is especially important, it helps explain why these metrics matter and where gaps still exist.
 
 ## How it works
 

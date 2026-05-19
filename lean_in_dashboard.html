@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lean In — Leadership Advancement Dashboard</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,600;0,700;1,300;1,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --green:#0d6e4f;--green-mid:#1a9e6e;--green-l:#e6f5ef;--green-ll:#f2faf6;
+  --coral:#c94f2c;--coral-l:#fdf0ec;
+  --amber:#a06010;--amber-l:#fdf5e6;
+  --ink:#1a1814;--muted:#5c5a54;--faint:#9e9b94;
+  --bg:#faf8f4;--surface:#ffffff;--border:#e8e4db;
+}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh}
+
+/* ── TOP BANNER ── */
+.banner{background:var(--green);color:#fff;padding:2.5rem 2rem 0}
+.banner-inner{max-width:1100px;margin:0 auto}
+.banner-top{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:1rem;margin-bottom:2rem}
+.banner-label{font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;opacity:.65;margin-bottom:.4rem}
+.banner-title{font-family:'Fraunces',serif;font-size:36px;font-weight:700;line-height:1.15;letter-spacing:-.3px}
+.banner-title em{font-style:italic;font-weight:300;opacity:.85}
+.banner-date{font-size:12px;opacity:.55;margin-top:.4rem}
+.banner-stats{display:flex;gap:2rem;flex-wrap:wrap;opacity:.8;font-size:13px;margin-top:.25rem}
+.banner-stats span{display:flex;align-items:center;gap:6px}
+.banner-stats span::before{content:'';width:4px;height:4px;border-radius:50%;background:rgba(255,255,255,.5);flex-shrink:0}
+.banner-stats span:first-child::before{display:none}
+
+/* ── HERO STAT CARDS ── */
+.hero-strip{background:var(--green);padding:0 2rem 2rem}
+.hero-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.15);border-radius:12px;overflow:hidden}
+@media(max-width:700px){.hero-inner{grid-template-columns:repeat(2,1fr)}}
+.hero-kpi{background:rgba(255,255,255,.08);padding:1.25rem 1.5rem;cursor:default;transition:background .2s}
+.hero-kpi:hover{background:rgba(255,255,255,.15)}
+.hero-kpi-label{font-size:11px;font-weight:500;opacity:.6;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.5rem;color:#fff}
+.hero-kpi-value{font-family:'Fraunces',serif;font-size:32px;font-weight:700;color:#fff;letter-spacing:-1px;line-height:1}
+.hero-kpi-sub{font-size:11px;margin-top:.35rem;color:rgba(255,255,255,.55)}
+.hero-kpi-delta{display:inline-flex;align-items:center;gap:3px;font-size:11px;font-weight:600;padding:2px 7px;border-radius:10px;margin-top:.4rem}
+.delta-good{background:rgba(255,255,255,.18);color:#a8f0cc}
+.delta-warn{background:rgba(255,120,60,.25);color:#ffccaa}
+
+/* ── MAIN SHELL ── */
+.shell{max-width:1100px;margin:0 auto;padding:2rem}
+
+/* ── SECTION HEADS ── */
+.section-intro{margin:2.5rem 0 1.25rem}
+.section-intro h2{font-family:'Fraunces',serif;font-size:22px;font-weight:600;color:var(--ink);margin-bottom:.3rem}
+.section-intro p{font-size:13px;color:var(--muted);max-width:560px;line-height:1.6}
+
+/* ── CARDS ── */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-bottom:1.25rem}
+.grid-3{display:grid;grid-template-columns:2fr 1fr;gap:1.25rem;margin-bottom:1.25rem}
+@media(max-width:700px){.grid-2,.grid-3{grid-template-columns:1fr}}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.5rem}
+.card-eyebrow{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--faint);margin-bottom:.4rem}
+.card-insight{font-family:'Fraunces',serif;font-size:17px;font-weight:600;color:var(--ink);line-height:1.35;margin-bottom:.3rem}
+.card-sub{font-size:12px;color:var(--muted);margin-bottom:1.1rem;line-height:1.5}
+.badge-real{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;background:var(--green-l);color:var(--green);padding:2px 7px;border-radius:3px;margin-left:6px;vertical-align:middle}
+.badge-sim{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;background:var(--amber-l);color:var(--amber);padding:2px 7px;border-radius:3px;margin-left:6px;vertical-align:middle}
+
+/* ── LEGEND ── */
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;margin-bottom:.9rem}
+.leg{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted)}
+.leg-sq{width:10px;height:10px;border-radius:2px;flex-shrink:0}
+.leg-line{width:18px;height:2.5px;border-radius:2px;flex-shrink:0}
+.leg-dash{width:18px;height:0;border-top:2.5px dashed;flex-shrink:0}
+
+/* ── CALLOUT ── */
+.callout{border-radius:8px;padding:.9rem 1.1rem;margin-top:1rem;font-size:13px;line-height:1.6}
+.callout-red{background:var(--coral-l);border-left:3px solid var(--coral);color:var(--ink)}
+.callout-red strong{color:var(--coral)}
+.callout-green{background:var(--green-ll);border-left:3px solid var(--green-mid);color:var(--ink)}
+.callout-green strong{color:var(--green)}
+.callout-amber{background:var(--amber-l);border-left:3px solid var(--amber);color:var(--ink)}
+.callout-amber strong{color:var(--amber)}
+
+/* ── HEATMAP ── */
+.heatmap{display:grid;grid-template-columns:repeat(12,1fr);gap:4px;margin-top:.6rem}
+.hm-cell{text-align:center}
+.hm-mo{font-size:9px;color:var(--faint);margin-bottom:3px}
+.hm-bar{height:30px;border-radius:4px}
+.hm-pct{font-size:9px;color:var(--muted);margin-top:2px}
+.heat-scale{display:flex;gap:5px;align-items:center;margin-top:.6rem;font-size:10px;color:var(--faint)}
+.heat-swatches{display:flex;gap:3px}
+.heat-swatches span{width:16px;height:7px;border-radius:2px;display:block}
+
+/* ── PARITY ── */
+.parity-row{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:.75rem}
+.parity-card{border-radius:10px;padding:1rem 1.1rem}
+.parity-num{font-family:'Fraunces',serif;font-size:28px;font-weight:700;letter-spacing:-1px;line-height:1.1;margin:4px 0}
+
+/* ── CIRCLES TABLE ── */
+.section-head{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--faint);margin:2.5rem 0 .85rem;padding-bottom:.5rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.tbl-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.tbl-note{font-size:12px;color:var(--muted);padding:1rem 1.5rem .75rem;border-bottom:1px solid var(--border)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--faint);padding:.75rem 1rem .75rem 1.5rem;background:var(--bg);border-bottom:1px solid var(--border)}
+td{padding:.85rem 1rem .85rem 1.5rem;border-bottom:1px solid var(--border);color:var(--ink)}
+tr:last-child td{border-bottom:none}
+tbody tr:hover{background:#faf8f4}
+.pill{display:inline-block;font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px}
+.pill-green{background:var(--green-l);color:var(--green)}
+.pill-amber{background:var(--amber-l);color:var(--amber)}
+.pill-red{background:var(--coral-l);color:var(--coral)}
+
+/* ── VIEW TABS ── */
+.controls{display:flex;gap:10px;align-items:center;margin-bottom:2rem;flex-wrap:wrap;padding-top:.5rem}
+.controls label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--faint)}
+select{font-family:'Inter',sans-serif;font-size:13px;background:var(--surface);border:1px solid var(--border);border-radius:7px;padding:6px 26px 6px 10px;appearance:none;cursor:pointer;color:var(--ink);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='%239e9b94' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 8px center}
+.tabs{display:flex;border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-left:auto}
+.tab{font-family:'Inter',sans-serif;font-size:12px;font-weight:500;padding:7px 16px;background:var(--surface);color:var(--muted);cursor:pointer;border:none;transition:all .15s}
+.tab.active{background:var(--ink);color:#fff}
+
+/* ── FOOTER ── */
+footer{margin-top:3rem;padding:1.5rem 0;border-top:1px solid var(--border);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;font-size:11px;color:var(--faint)}
+</style>
+</head>
+<body>
+
+<!-- TOP BANNER -->
+<div class="banner">
+  <div class="banner-inner">
+    <div class="banner-top">
+      <div>
+        <div class="banner-label">Lean In · Internal · Weekly</div>
+        <div class="banner-title">Are women <em>actually</em><br>advancing?</div>
+        <div class="banner-date">Week of May 19, 2026</div>
+      </div>
+      <div style="text-align:right">
+        <div class="banner-stats">
+          <span>83,400 active members</span>
+          <span>12,300 Circles</span>
+          <span>183 countries</span>
+        </div>
+        <div style="font-size:11px;opacity:.45;margin-top:.75rem;text-align:right">Industry benchmarks: Women in the Workplace 2024/2025<br>McKinsey & LeanIn.Org · real published data</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- HERO KPI STRIP -->
+<div class="hero-strip">
+  <div class="hero-inner" id="heroStrip"></div>
+</div>
+
+<!-- MAIN -->
+<div class="shell">
+
+  <div class="controls">
+    <label>Filter by region</label>
+    <select id="regionSelect" onchange="updateKPIs()">
+      <option value="all">All regions</option>
+      <option value="na">North America</option>
+      <option value="eu">Europe</option>
+      <option value="ap">Asia Pacific</option>
+      <option value="la">Latin America</option>
+      <option value="af">Africa</option>
+    </select>
+    <div class="tabs">
+      <button class="tab active" onclick="switchView('platform',this)">Platform health</button>
+      <button class="tab" onclick="switchView('industry',this)">Industry context</button>
+    </div>
+  </div>
+
+  <!-- PLATFORM VIEW -->
+  <div id="platformView">
+
+    <div class="section-intro">
+      <h2>How are our Circles performing?</h2>
+      <p>Circle members are nearly twice as likely to be promoted — but only if they stay engaged. These signals tell us whether that's happening.</p>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-eyebrow">Promotion lift <span class="badge-sim">simulated</span></div>
+        <div class="card-insight">Circle members promote at 1.87× the rate of non-members</div>
+        <div class="card-sub">Quarterly data · anchored to WitW ~13% population baseline</div>
+        <div class="legend">
+          <div class="leg"><span class="leg-sq" style="background:#0d6e4f"></span>Circle members</div>
+          <div class="leg"><span class="leg-sq" style="background:#ccc8be"></span>Non-members</div>
+          <div class="leg"><span class="leg-sq" style="background:#c94f2c"></span>WoC members</div>
+        </div>
+        <div style="position:relative;height:200px"><canvas id="promoChart" role="img" aria-label="Quarterly promotion rates 2023-2024, circle members consistently higher than non-members">Circle members promote at ~1.87x the rate of non-members every quarter.</canvas></div>
+        <div class="callout callout-amber"><strong>Note:</strong> This is correlational — women who join Circles may already be more career-motivated. Worth tracking, not overstating.</div>
+      </div>
+      <div class="card">
+        <div class="card-eyebrow">Member retention <span class="badge-sim">simulated</span></div>
+        <div class="card-insight">We lose the most members in the first 30 days</div>
+        <div class="card-sub">% still active since joining — 2024 vs 2023 cohort</div>
+        <div class="legend">
+          <div class="leg"><span class="leg-line" style="background:#0d6e4f"></span>2024 cohort</div>
+          <div class="leg"><span class="leg-dash" style="border-color:#b4b2a9"></span>2023 cohort</div>
+        </div>
+        <div style="position:relative;height:200px"><canvas id="retentionChart" role="img" aria-label="Retention curve showing steep drop in first 30 days then stabilising around 73% at 90 days">Retention stabilises around 73% at 90 days — steepest drop is in the first 30 days.</canvas></div>
+        <div class="callout callout-green"><strong>Opportunity:</strong> The day 0–30 window is where to focus. A single well-timed check-in could meaningfully improve long-term retention.</div>
+      </div>
+    </div>
+
+    <div class="grid-3">
+      <div class="card">
+        <div class="card-eyebrow">Meeting cadence <span class="badge-sim">simulated</span></div>
+        <div class="card-insight">Circles are meeting more consistently than a year ago</div>
+        <div class="card-sub">% of Circles meeting on schedule each month in 2025</div>
+        <div class="heatmap" id="heatmap"></div>
+        <div class="heat-scale">
+          <span>Less active</span>
+          <div class="heat-swatches">
+            <span style="background:#c8ead9"></span><span style="background:#8fcfb0"></span>
+            <span style="background:#4db888"></span><span style="background:#1a9e6e"></span>
+            <span style="background:#0a5e40"></span>
+          </div>
+          <span>More active</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-eyebrow">Circle health <span class="badge-sim">simulated</span></div>
+        <div class="card-insight">About half our Circles are thriving right now</div>
+        <div class="card-sub">Health status across all active Circles this week</div>
+        <div class="legend">
+          <div class="leg"><span class="leg-sq" style="background:#1a9e6e"></span>Thriving</div>
+          <div class="leg"><span class="leg-sq" style="background:#c8861a"></span>At risk</div>
+          <div class="leg"><span class="leg-sq" style="background:#c94f2c"></span>Dormant</div>
+        </div>
+        <div style="position:relative;height:155px"><canvas id="healthChart" role="img" aria-label="Donut chart: 52% thriving, 28% at risk, 20% dormant">52% thriving, 28% at risk, 20% dormant.</canvas></div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-eyebrow">Engagement depth <span class="badge-sim">simulated</span></div>
+        <div class="card-insight">Most members are still just reading — we want them doing</div>
+        <div class="card-sub">% of active members at each engagement level</div>
+        <div style="position:relative;height:195px"><canvas id="engageChart" role="img" aria-label="Horizontal bars from passive viewer at 38% down to active contributor at 8%">38% passive viewers, 8% active contributors at the other end.</canvas></div>
+        <div class="callout callout-green"><strong>Why it matters:</strong> Members who set goals and discuss them with peers are the ones who get promoted. Moving someone from passive to goal-setter is the lever.</div>
+      </div>
+      <div class="card">
+        <div class="card-eyebrow">Regional growth <span class="badge-sim">simulated</span></div>
+        <div class="card-insight">Africa and Latin America are growing fastest — where the gap is largest</div>
+        <div class="card-sub">New Circles formed this quarter vs. last quarter</div>
+        <div class="legend">
+          <div class="leg"><span class="leg-sq" style="background:#0d6e4f"></span>This quarter</div>
+          <div class="leg"><span class="leg-sq" style="background:#ccc8be"></span>Last quarter</div>
+        </div>
+        <div style="position:relative;height:195px"><canvas id="regionChart" role="img" aria-label="Horizontal bars of Circle growth by region, Africa and Latin America leading">Africa and Latin America lead new Circle growth this quarter.</canvas></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- INDUSTRY VIEW -->
+  <div id="industryView" style="display:none">
+
+    <div class="section-intro">
+      <h2>This is the problem Lean In exists to solve</h2>
+      <p>Real data from the Women in the Workplace 2024 report. This is the industry backdrop every Circle member is working against.</p>
+    </div>
+
+    <div class="card" style="margin-bottom:1.25rem">
+      <div class="card-eyebrow">The broken rung <span class="badge-real">real data · WitW 2024</span></div>
+      <div class="card-insight">Women have never reached parity at the first promotion — and 2024 was a step backward</div>
+      <div class="card-sub">Women promoted to manager for every 100 men, 2018–2024 · Source: McKinsey & LeanIn.Org</div>
+      <div class="legend">
+        <div class="leg"><span class="leg-line" style="background:#1a9e6e"></span>All women</div>
+        <div class="leg"><span class="leg-line" style="background:#c94f2c"></span>Women of color</div>
+        <div class="leg"><span class="leg-dash" style="border-color:#a03020"></span>Black women</div>
+        <div class="leg"><span class="leg-dash" style="border-color:#c8861a"></span>Latinas</div>
+        <div class="leg"><span class="leg-line" style="background:#534AB7"></span>White women</div>
+      </div>
+      <div style="position:relative;height:280px"><canvas id="brokenRungChart" role="img" aria-label="Line chart 2018-2024. All groups peaked in 2022-23 then fell back in 2024. Black women regressed to 2020 levels at 54 per 100 men.">All groups peaked in 2022–23 then regressed in 2024.</canvas></div>
+      <div class="callout callout-red"><strong>2024 was a bad year.</strong> Black women fell to 54 per 100 men — back to where they were in 2020. Latinas hit their lowest point on record at 65 per 100. The progress of the prior two years was wiped out in one year.</div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-eyebrow">The pipeline <span class="badge-real">real data · WitW 2024</span></div>
+        <div class="card-insight">Women are outnumbered at every level — and the gap compounds going up</div>
+        <div class="card-sub">% of employees who are women at each corporate level</div>
+        <div class="legend">
+          <div class="leg"><span class="leg-sq" style="background:rgba(83,74,183,.75)"></span>All women</div>
+          <div class="leg"><span class="leg-sq" style="background:rgba(201,79,44,.75)"></span>Women of color</div>
+        </div>
+        <div style="position:relative;height:230px"><canvas id="pipelineChart" role="img" aria-label="Bar chart showing women drop from 48% at entry level to 29% at C-suite, WoC from 21% to 7%">Women drop from 48% at entry to 29% at C-suite. WoC drop from 21% to 7%.</canvas></div>
+        <div class="callout callout-green"><strong>Where Lean In works:</strong> Circle members promote at ~1.87× the general rate — directly addressing the broken rung at the bottom of this pipeline.</div>
+      </div>
+      <div class="card">
+        <div class="card-eyebrow">Time to parity <span class="badge-real">real data · WitW 2024</span></div>
+        <div class="card-insight">At current pace, women of color won't reach parity for nearly 50 years</div>
+        <div class="card-sub">Projected years to equal representation in corporate leadership</div>
+        <div class="parity-row" id="parityCards"></div>
+        <div class="callout callout-red" style="margin-top:1rem"><strong>The urgency is real.</strong> White women are on a 22-year timeline. Women of color are on a 48-year timeline. And 2024 made both timelines longer.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- CIRCLES TABLE -->
+  <div class="section-head">
+    <span>Circles that need attention this week</span>
+    <span class="badge-sim">simulated data</span>
+  </div>
+  <div class="tbl-card">
+    <div class="tbl-note">Sorted by days since last meeting. A Circle that isn't meeting isn't helping anyone — these are the ones to reach out to first.</div>
+    <table>
+      <thead>
+        <tr>
+          <th>Circle</th><th>Region</th><th>Members</th>
+          <th>Last meeting</th><th>90d retention</th><th>Health</th><th>Suggested action</th>
+        </tr>
+      </thead>
+      <tbody id="circleTableBody"></tbody>
+    </table>
+  </div>
+
+  <footer>
+    <span>Industry benchmarks: Women in the Workplace 2024/2025, McKinsey & LeanIn.Org · Platform metrics: synthetic, seeded to published baselines</span>
+    <span>Chart.js · Fraunces / Inter · HTML/JS · Claude AI</span>
+  </footer>
+
+</div><!-- end shell -->
+
+<script>
+const D={"broken_rung":[{"year":2018,"all_women":79,"woc":68,"black_women":58,"latinas":71,"white_women":83},{"year":2019,"all_women":81,"woc":70,"black_women":59,"latinas":72,"white_women":85},{"year":2020,"all_women":82,"woc":71,"black_women":58,"latinas":73,"white_women":86},{"year":2021,"all_women":86,"woc":75,"black_women":64,"latinas":77,"white_women":88},{"year":2022,"all_women":87,"woc":77,"black_women":66,"latinas":79,"white_women":89},{"year":2023,"all_women":87,"woc":76,"black_women":65,"latinas":78,"white_women":89},{"year":2024,"all_women":81,"woc":74,"black_women":54,"latinas":65,"white_women":89}],"pipeline":[{"level":"Entry level","women_pct":48,"woc_pct":21},{"level":"Manager","women_pct":42,"woc_pct":14},{"level":"Sr. Mgr/Dir","women_pct":39,"woc_pct":10},{"level":"VP","women_pct":35,"woc_pct":9},{"level":"SVP","women_pct":32,"woc_pct":8},{"level":"C-Suite","women_pct":29,"woc_pct":7}],"quarterly_promos":[{"quarter":"Q1 2023","circle_pct":25.3,"nonmember_pct":12.5,"woc_pct":20.6},{"quarter":"Q2 2023","circle_pct":24.0,"nonmember_pct":13.7,"woc_pct":21.6},{"quarter":"Q3 2023","circle_pct":26.0,"nonmember_pct":12.6,"woc_pct":20.9},{"quarter":"Q4 2023","circle_pct":23.5,"nonmember_pct":12.9,"woc_pct":21.2},{"quarter":"Q1 2024","circle_pct":23.5,"nonmember_pct":12.8,"woc_pct":21.5},{"quarter":"Q2 2024","circle_pct":25.0,"nonmember_pct":12.9,"woc_pct":21.4},{"quarter":"Q3 2024","circle_pct":25.8,"nonmember_pct":12.5,"woc_pct":21.9},{"quarter":"Q4 2024","circle_pct":25.5,"nonmember_pct":13.0,"woc_pct":20.3}],"retention_curve":[{"days":0,"pct_2024":100.0,"pct_2023":100.0},{"days":7,"pct_2024":96.7,"pct_2023":95.0},{"days":14,"pct_2024":91.4,"pct_2023":90.4},{"days":30,"pct_2024":86.3,"pct_2023":84.0},{"days":45,"pct_2024":81.6,"pct_2023":79.1},{"days":60,"pct_2024":77.7,"pct_2023":75.8},{"days":90,"pct_2024":73.0,"pct_2023":70.1}],"monthly_cadence":[{"month":"Jan","pct":56},{"month":"Feb","pct":59},{"month":"Mar","pct":61},{"month":"Apr","pct":65},{"month":"May","pct":65},{"month":"Jun","pct":69},{"month":"Jul","pct":71},{"month":"Aug","pct":73},{"month":"Sep","pct":71},{"month":"Oct","pct":64},{"month":"Nov","pct":67},{"month":"Dec","pct":68}],"regional_growth":[{"region":"Africa","this_q":142,"last_q":118},{"region":"Latin America","this_q":128,"last_q":105},{"region":"Asia Pacific","this_q":97,"last_q":89},{"region":"North America","this_q":84,"last_q":90},{"region":"Europe","this_q":71,"last_q":78},{"region":"Middle East","this_q":45,"last_q":38}],"circles":[{"name":"NYC Tech Leaders","region":"North America","members":24,"days_inactive":3,"retention":82,"status":"Thriving"},{"name":"Lagos Rising","region":"Africa","members":18,"days_inactive":2,"retention":77,"status":"Thriving"},{"name":"Berlin Corporate","region":"Europe","members":31,"days_inactive":47,"retention":44,"status":"At risk"},{"name":"São Paulo Finance","region":"Latin America","members":12,"days_inactive":61,"retention":38,"status":"At risk"},{"name":"Seoul Mid-Career","region":"Asia Pacific","members":9,"days_inactive":94,"retention":21,"status":"Dormant"},{"name":"Chicago Healthcare","region":"North America","members":27,"days_inactive":8,"retention":71,"status":"Thriving"},{"name":"Mumbai Founders","region":"Asia Pacific","members":15,"days_inactive":29,"retention":59,"status":"Thriving"},{"name":"London Policy","region":"Europe","members":22,"days_inactive":112,"retention":15,"status":"Dormant"},{"name":"Mexico City STEM","region":"Latin America","members":20,"days_inactive":19,"retention":63,"status":"Thriving"},{"name":"Nairobi Exec","region":"Africa","members":11,"days_inactive":44,"retention":48,"status":"At risk"}]};
+
+const CC={};
+function mk(id,cfg){if(CC[id])CC[id].destroy();CC[id]=new Chart(document.getElementById(id),cfg);}
+
+const KPI={
+  all:{lift:"1.87×",ret:"68%",adv:"72/100",woc:"59%",ld:"good",rd:"good",wd:"warn"},
+  na: {lift:"1.92×",ret:"71%",adv:"75/100",woc:"54%",ld:"good",rd:"good",wd:"warn"},
+  eu: {lift:"1.81×",ret:"66%",adv:"70/100",woc:"62%",ld:"good",rd:"good",wd:"good"},
+  ap: {lift:"1.74×",ret:"62%",adv:"68/100",woc:"65%",ld:"good",rd:"warn",wd:"good"},
+  la: {lift:"1.95×",ret:"65%",adv:"71/100",woc:"61%",ld:"good",rd:"good",wd:"good"},
+  af: {lift:"2.01×",ret:"73%",adv:"74/100",woc:"71%",ld:"good",rd:"good",wd:"good"},
+};
+
+function updateKPIs(){
+  const r=document.getElementById('regionSelect').value;
+  const d=KPI[r]||KPI.all;
+  document.getElementById('heroStrip').innerHTML=[
+    {label:"Circle promotion lift",value:d.lift,sub:"vs. non-members",delta:d.ld==='good'?"↑ above target":"↓ below target",dc:d.ld},
+    {label:"Members still active at 90d",value:d.ret,sub:"of new members retained",delta:d.rd==='good'?"↑ +4pp vs last cohort":"↓ -2pp vs last cohort",dc:d.rd},
+    {label:"Career advancement score",value:d.adv,sub:"quarterly survey · n=4,200",delta:"· goal progress + confidence",dc:"good"},
+    {label:"Women of color participating",value:d.woc,sub:d.wd==='warn'?"below our 60% target":"above our 60% target",delta:d.wd==='warn'?"↓ needs attention":"↑ on track",dc:d.wd},
+  ].map(k=>`<div class="hero-kpi">
+    <div class="hero-kpi-label">${k.label}</div>
+    <div class="hero-kpi-value">${k.value}</div>
+    <div class="hero-kpi-sub">${k.sub}</div>
+    <div class="hero-kpi-delta ${k.dc==='good'?'delta-good':'delta-warn'}">${k.delta}</div>
+  </div>`).join('');
+}
+
+function buildPlatform(){
+  const qp=D.quarterly_promos;
+  mk('promoChart',{type:'bar',data:{labels:qp.map(x=>x.quarter),datasets:[
+    {label:'Circle members',data:qp.map(x=>x.circle_pct),backgroundColor:'rgba(13,110,79,0.85)',borderRadius:4},
+    {label:'Non-members',data:qp.map(x=>x.nonmember_pct),backgroundColor:'rgba(180,178,165,0.5)',borderRadius:4},
+    {label:'WoC members',data:qp.map(x=>x.woc_pct),backgroundColor:'rgba(201,79,44,0.8)',borderRadius:4},
+  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+    scales:{x:{grid:{display:false},ticks:{font:{size:10},maxRotation:40}},
+            y:{ticks:{callback:v=>v+'%',font:{size:11}},grid:{color:'rgba(0,0,0,0.04)'},title:{display:true,text:'% promoted',font:{size:11}}}}}});
+
+  const rc=D.retention_curve;
+  mk('retentionChart',{type:'line',data:{labels:rc.map(r=>r.days===0?'Day 0':r.days+'d'),datasets:[
+    {data:rc.map(r=>r.pct_2024),borderColor:'#0d6e4f',backgroundColor:'rgba(13,110,79,0.07)',fill:true,tension:.4,pointRadius:3,borderWidth:2.5},
+    {data:rc.map(r=>r.pct_2023),borderColor:'#b4b2a9',borderDash:[5,3],fill:false,tension:.4,pointRadius:3,borderWidth:2},
+  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+    scales:{x:{grid:{display:false},ticks:{font:{size:11}}},
+            y:{min:55,max:100,ticks:{callback:v=>v+'%',font:{size:11}},grid:{color:'rgba(0,0,0,0.04)'}}}}});
+
+  mk('healthChart',{type:'doughnut',data:{labels:['Thriving','At risk','Dormant'],
+    datasets:[{data:[52,28,20],backgroundColor:['#1a9e6e','#c8861a','#c94f2c'],borderWidth:0,hoverOffset:5}]},
+    options:{responsive:true,maintainAspectRatio:false,cutout:'66%',
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`${c.label}: ${c.raw}%`}}}}});
+
+  mk('engageChart',{type:'bar',data:{
+    labels:['Passive reader','Downloads resources','Sets career goals','Comments & helps peers','Active contributor'],
+    datasets:[{data:[38,24,18,12,8],backgroundColor:['#c8ead9','#8fcfb0','#4db888','#1a9e6e','#0d6e4f'],borderRadius:4,barThickness:16}]},
+    options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`${c.raw}% of active members`}}},
+      scales:{x:{max:50,ticks:{callback:v=>v+'%',font:{size:11}},grid:{color:'rgba(0,0,0,0.04)'}},
+              y:{grid:{display:false},ticks:{font:{size:11}}}}}});
+
+  const fills=['#c8ead9','#8fcfb0','#4db888','#1a9e6e','#0a5e40'];
+  document.getElementById('heatmap').innerHTML=D.monthly_cadence.map(row=>{
+    const idx=Math.min(4,Math.max(0,Math.floor((row.pct-50)/10)));
+    return `<div class="hm-cell" title="${row.month}: ${row.pct}% of Circles met on schedule">
+      <div class="hm-mo">${row.month}</div>
+      <div class="hm-bar" style="background:${fills[idx]}"></div>
+      <div class="hm-pct">${row.pct}%</div>
+    </div>`;
+  }).join('');
+
+  const rg=[...D.regional_growth].sort((a,b)=>b.this_q-a.this_q);
+  mk('regionChart',{type:'bar',data:{labels:rg.map(r=>r.region),datasets:[
+    {label:'This quarter',data:rg.map(r=>r.this_q),backgroundColor:'rgba(13,110,79,0.85)',borderRadius:4,barThickness:13},
+    {label:'Last quarter',data:rg.map(r=>r.last_q),backgroundColor:'rgba(180,178,165,0.4)',borderRadius:4,barThickness:13},
+  ]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`${c.dataset.label}: ${c.raw} new Circles`}}},
+    scales:{x:{grid:{color:'rgba(0,0,0,0.04)'},ticks:{font:{size:11}}},y:{grid:{display:false},ticks:{font:{size:11}}}}}});
+}
+
+function buildIndustry(){
+  const br=D.broken_rung;
+  mk('brokenRungChart',{type:'line',data:{labels:br.map(r=>String(r.year)),datasets:[
+    {label:'All women',  data:br.map(r=>r.all_women),  borderColor:'#1a9e6e',fill:false,tension:.3,pointRadius:5,borderWidth:2.5},
+    {label:'WoC',        data:br.map(r=>r.woc),        borderColor:'#c94f2c',fill:false,tension:.3,pointRadius:5,borderWidth:2.5},
+    {label:'Black women',data:br.map(r=>r.black_women),borderColor:'#a03020',borderDash:[5,3],fill:false,tension:.3,pointRadius:4,borderWidth:2},
+    {label:'Latinas',    data:br.map(r=>r.latinas),    borderColor:'#c8861a',borderDash:[5,3],fill:false,tension:.3,pointRadius:4,borderWidth:2},
+    {label:'White women',data:br.map(r=>r.white_women),borderColor:'#534AB7',fill:false,tension:.3,pointRadius:4,borderWidth:2},
+  ]},options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`${c.dataset.label}: ${c.raw} per 100 men`}}},
+    scales:{x:{grid:{display:false},ticks:{font:{size:12}}},
+            y:{min:45,max:100,ticks:{font:{size:11}},grid:{color:'rgba(0,0,0,0.04)'},
+               title:{display:true,text:'Women promoted per 100 men',font:{size:11}}}}}});
+
+  mk('pipelineChart',{type:'bar',data:{labels:D.pipeline.map(p=>p.level),datasets:[
+    {label:'All women',data:D.pipeline.map(p=>p.women_pct),backgroundColor:'rgba(83,74,183,0.75)',borderRadius:4,barThickness:20},
+    {label:'WoC',      data:D.pipeline.map(p=>p.woc_pct),  backgroundColor:'rgba(201,79,44,0.78)', borderRadius:4,barThickness:20},
+  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+    scales:{x:{grid:{display:false},ticks:{font:{size:11}}},
+            y:{max:55,ticks:{callback:v=>v+'%',font:{size:11}},grid:{color:'rgba(0,0,0,0.04)'},
+               title:{display:true,text:'% of employees',font:{size:11}}}}}});
+
+  document.getElementById('parityCards').innerHTML=[
+    {label:'White women',years:22,c:'#534AB7',bg:'#f0eff9'},
+    {label:'Women of color',years:48,c:'#c94f2c',bg:'#fdf0ec'},
+    {label:'Black women',years:null,c:'#a03020',bg:'#fdf0ec'},
+    {label:'Latinas',years:null,c:'#a06010',bg:'#fdf5e6'},
+  ].map(i=>`<div class="parity-card" style="background:${i.bg}">
+    <div style="font-size:11px;font-weight:600;color:${i.c};margin-bottom:4px">${i.label}</div>
+    <div class="parity-num" style="color:${i.c}">${i.years?i.years+' yrs':'Regressed'}</div>
+    <div style="font-size:10px;color:${i.c};opacity:.7">${i.years?`~${2024+i.years} to reach parity`:'2024 was worst year on record'}</div>
+  </div>`).join('');
+}
+
+const RMAP={na:"North America",eu:"Europe",ap:"Asia Pacific",la:"Latin America",af:"Africa"};
+const AMAP={"Thriving":"Keep going — no action needed","At risk":"Send a personal check-in this week","Dormant":"Reach out directly or consider sunsetting"};
+
+function buildTable(){
+  const sorted=[...D.circles].sort((a,b)=>b.days_inactive-a.days_inactive);
+  const pc=s=>s==='Thriving'?'pill-green':s==='At risk'?'pill-amber':'pill-red';
+  const dc=d=>d>60?'#c94f2c':d>30?'#a06010':'#5c5a54';
+  document.getElementById('circleTableBody').innerHTML=sorted.map(c=>`
+    <tr>
+      <td><strong>${c.name}</strong></td>
+      <td style="color:#5c5a54">${c.region}</td>
+      <td>${c.members}</td>
+      <td style="color:${dc(c.days_inactive)};font-weight:${c.days_inactive>30?'600':'400'}">${c.days_inactive===0?'Today':c.days_inactive+'d ago'}</td>
+      <td>${c.retention}%</td>
+      <td><span class="pill ${pc(c.status)}">${c.status}</span></td>
+      <td style="color:#5c5a54;font-size:12px">${AMAP[c.status]}</td>
+    </tr>`).join('');
+}
+
+let industryReady=false;
+function switchView(v,btn){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('platformView').style.display=v==='platform'?'':'none';
+  document.getElementById('industryView').style.display=v==='industry'?'':'none';
+  if(v==='industry'&&!industryReady){setTimeout(buildIndustry,30);industryReady=true;}
+}
+
+updateKPIs();
+buildPlatform();
+buildTable();
+</script>
+</body>
+</html>

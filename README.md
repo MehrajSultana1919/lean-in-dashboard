@@ -14,7 +14,7 @@ When you open the dashboard, you’ll see two perspectives:
 
 ## How it works
 
-Opening the dashboard is as easy as double-clicking `dashboard.html` in your browser. There’s no server, no installation, no setup. Everything runs locally because all the data is embedded right in the file.
+Opening the dashboard is as easy as double-clicking `lean_in_dashboard.html` in your browser. There’s no server, no installation, no setup. Everything runs locally because all the data is embedded right in the file.
 
 ## What’s real and what’s simulated
 

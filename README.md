@@ -44,3 +44,5 @@ I would also dig deeper into the promotion lift. The 1.87× number is meaningful
 ## One thing I really want you to notice
 
 The **WoC participation rate** is front and center. I put it there deliberately. If that number is low, it means the platform is mostly helping women who already have advantages, which is exactly the opposite of Lean In’s mission. I want this KPI to be the first thing a leader sees every week, not buried in a filter somewhere.
+
+Open lean_in_dashboard.html in any browser. Double-click it. That's it — no server, no install, no setup.
